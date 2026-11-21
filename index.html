@@ -7,6 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Chart.js for Clean Pie Chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --cp-navy: #0f1d38;
@@ -109,7 +111,7 @@
       50% { opacity: 0.3; transform: scale(1.25); }
     }
 
-    /* --- TOP LIVE MOVING TICKER FEED --- */
+    /* --- TOP LIVE MOVING TICKER FEED (Adjusted Slow Speed) --- */
     .live-feed-strip {
       background: #0f1d38;
       border-radius: 10px;
@@ -149,7 +151,7 @@
       display: inline-block;
       white-space: nowrap;
       padding-left: 100%;
-      animation: ticker-slide 115s linear infinite;
+      animation: ticker-slide 70s linear infinite; /* Readable slow speed */
     }
 
     .ticker-content:hover {
@@ -171,20 +173,9 @@
       margin-right: 28px;
     }
 
-    .ticker-item .highlight-name {
-      color: #67e8f9;
-      font-weight: 700;
-    }
-
-    .ticker-item .highlight-val {
-      color: #facc15;
-      font-weight: 800;
-    }
-
-    .ticker-dot {
-      color: #64748b;
-      margin-right: 28px;
-    }
+    .ticker-item .highlight-name { color: #67e8f9; font-weight: 700; }
+    .ticker-item .highlight-val { color: #facc15; font-weight: 800; }
+    .ticker-dot { color: #64748b; margin-right: 28px; }
 
     /* --- 3 KPI Cards Grid --- */
     .kpi-grid {
@@ -197,7 +188,7 @@
     .kpi-card {
       background: #ffffff;
       border-radius: 12px;
-      padding: 12px 18px;
+      padding: 14px 20px;
       border: 1px solid var(--border-color);
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
       position: relative;
@@ -221,7 +212,7 @@
     .kpi-card.success::before { background: #10b981; }
 
     .kpi-title {
-      font-size: 11px;
+      font-size: 11.5px;
       font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
@@ -229,7 +220,7 @@
     }
 
     .kpi-value {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 800;
       color: var(--cp-navy);
       margin-top: 3px;
@@ -238,9 +229,15 @@
     /* Main Dashboard Layout */
     .dashboard-layout {
       display: grid;
-      grid-template-columns: 490px 1fr;
+      grid-template-columns: 460px 1fr;
       gap: 14px;
       align-items: start;
+    }
+
+    .left-stack, .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
     .panel-card {
@@ -252,7 +249,7 @@
     }
 
     .panel-header {
-      padding: 11px 16px;
+      padding: 12px 18px;
       background: #ffffff;
       border-bottom: 1px solid var(--border-color);
       display: flex;
@@ -261,7 +258,7 @@
     }
 
     .panel-header h3 {
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 800;
       color: var(--cp-navy);
       display: flex;
@@ -281,8 +278,8 @@
     /* Leaderboard Headers & Rows */
     .leaderboard-table-header {
       display: grid;
-      grid-template-columns: 46px 1.4fr 1.3fr 75px;
-      padding: 8px 14px;
+      grid-template-columns: 46px 1.3fr 1.3fr 75px;
+      padding: 9px 14px;
       background: #f8fafc;
       border-bottom: 1px solid var(--border-color);
       font-size: 11px;
@@ -297,15 +294,15 @@
       flex-direction: column;
       gap: 6px;
       padding: 10px 12px;
-      max-height: 520px;
+      max-height: 290px;
       overflow-y: auto;
     }
 
     .leaderboard-item {
       display: grid;
-      grid-template-columns: 46px 1.4fr 1.3fr 75px;
+      grid-template-columns: 46px 1.3fr 1.3fr 75px;
       align-items: center;
-      padding: 9px 8px;
+      padding: 8px;
       border-radius: 9px;
       border: 1px solid #edf2f7;
       background: #ffffff;
@@ -340,7 +337,7 @@
     .rank-3 .rank-num { background: #ffedd5; color: #9a3412; }
 
     .name-text {
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       color: var(--cp-navy);
       white-space: nowrap;
@@ -361,12 +358,12 @@
       display: inline-block;
       padding: 3px 8px;
       border-radius: 5px;
-      font-size: 10px;
+      font-size: 10.5px;
       font-weight: 700;
       text-transform: capitalize;
       letter-spacing: 0.2px;
       white-space: nowrap;
-      max-width: 140px;
+      max-width: 130px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -376,44 +373,56 @@
     .tag-hva { background: #fef3c7; color: #92400e; }
     .tag-default { background: #f1f5f9; color: #475569; }
 
-    /* Right Stack & Tables */
-    .right-stack {
+    /* Pie Chart Container */
+    .chart-box {
+      padding: 14px 16px;
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 220px;
     }
 
+    /* Clean Proportional Tables (Eliminating Huge White Gaps) */
     .table-responsive {
-      max-height: 245px;
-      overflow-y: auto;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
-      font-size: 12.5px;
+      font-size: 13.5px;
+      table-layout: fixed; /* Prevents uneven gaps */
     }
 
     th {
-      position: sticky;
-      top: 0;
       background: #f8fafc;
-      padding: 9px 14px;
-      font-size: 10.5px;
+      padding: 11px 16px;
+      font-size: 11px;
       font-weight: 700;
       color: #64748b;
       text-transform: uppercase;
       letter-spacing: 0.4px;
       border-bottom: 1px solid var(--border-color);
-      z-index: 2;
     }
 
     td {
-      padding: 10px 14px;
+      padding: 12px 16px;
       border-bottom: 1px solid #f1f5f9;
-      color: #334155;
+      color: #1e293b;
+      font-weight: 600;
     }
+
+    /* Column Width Balancing */
+    .col-team { width: 30%; }
+    .col-orgs { width: 22%; text-align: center; }
+    .col-conv { width: 26%; text-align: right; }
+    .col-pct { width: 22%; text-align: right; }
+
+    .col-date { width: 35%; }
+    .col-d-orgs { width: 35%; text-align: center; }
+    .col-d-conv { width: 30%; text-align: right; }
 
     tr:hover td {
       background: #f8faff;
@@ -440,7 +449,7 @@
   <div class="header-bar">
     <div class="logo-section">
       <div class="classplus-logo">
-        <img id="logo-img" src="logo.png" alt="Classplus Logo" onerror="this.onerror=null; this.src='\image.png';" />
+        <img id="logo-img" src="logo.png" alt="Classplus Logo" onerror="this.onerror=null; this.src='https://images.seeklogo.com/logo-png/43/1/classplus-logo-png_seeklogo-434076.png';" />
       </div>
       <div class="divider"></div>
       <div class="campaign-title">
@@ -495,29 +504,45 @@
   <!-- Main Body Layout -->
   <div class="dashboard-layout">
     
-    <!-- LEFT: Horizontal Leaderboard with Columns -->
-    <div class="panel-card">
-      <div class="panel-header">
-        <h3>🏆 Rank & Individual Leaderboard</h3>
-        <span class="badge-count" id="leaderboard-count">-- Performers</span>
-      </div>
+    <!-- LEFT COLUMN: Leaderboard + Team Wise Pie Chart -->
+    <div class="left-stack">
       
-      <div class="leaderboard-table-header">
-        <div>Rank</div>
-        <div>Name</div>
-        <div>Team</div>
-        <div style="text-align: right;">% Conv.</div>
+      <!-- 1. Leaderboard -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>🏆 Rank & Individual Leaderboard</h3>
+          <span class="badge-count" id="leaderboard-count">-- Performers</span>
+        </div>
+        
+        <div class="leaderboard-table-header">
+          <div>Rank</div>
+          <div>Name</div>
+          <div>Team</div>
+          <div style="text-align: right;">% Conv.</div>
+        </div>
+
+        <div class="leaderboard-list" id="performer-list">
+          <!-- Dynamically rendered -->
+        </div>
       </div>
 
-      <div class="leaderboard-list" id="performer-list">
-        <!-- Dynamically rendered -->
+      <!-- 2. Team Wise Conversion Pie Chart -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>📊 Team-Wise Conversion Share</h3>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Share %</span>
+        </div>
+        <div class="chart-box">
+          <canvas id="teamPieChart"></canvas>
+        </div>
       </div>
+
     </div>
 
-    <!-- RIGHT: Team Wise & Date-wise Tables -->
+    <!-- RIGHT COLUMN: Team Wise & Date-wise Tables -->
     <div class="right-stack">
 
-      <!-- 1. Team Wise Performance -->
+      <!-- 1. Team Wise Performance Table -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>👥 Team Wise Performance</h3>
@@ -527,10 +552,10 @@
           <table>
             <thead>
               <tr>
-                <th>Team Name</th>
-                <th>Total Number of Orgs</th>
-                <th>Transactions Converted</th>
-                <th style="text-align: right;">Percentage of Converted</th>
+                <th class="col-team">Team Name</th>
+                <th class="col-orgs">Total Number of Orgs</th>
+                <th class="col-conv">Transactions Converted</th>
+                <th class="col-pct">Percentage of Converted</th>
               </tr>
             </thead>
             <tbody id="team-body">
@@ -540,19 +565,19 @@
         </div>
       </div>
 
-      <!-- 2. Date-wise Activity (Orgs Based) -->
+      <!-- 2. Date-wise Activity Table -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>📅 Date-wise Daily Activity</h3>
-          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Orgs Tracker</span>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Daily Volume</span>
         </div>
         <div class="table-responsive">
           <table>
             <thead>
               <tr>
-                <th>Date</th>
-                <th>Total Number of Orgs</th>
-                <th style="text-align: right;">Orgs Converted</th>
+                <th class="col-date">Date</th>
+                <th class="col-d-orgs">Total Number of Orgs</th>
+                <th class="col-d-conv">Orgs Converted</th>
               </tr>
             </thead>
             <tbody id="date-body">
@@ -567,9 +592,9 @@
   </div>
 
   <script>
-    // Aapka Naya Web App URL
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyCCVzSpKZlIi0I29BPsfhvhtz48frxJOrDJswKuTNIMP4Mf3UjR_GlMRXoh1pzga0Z/exec';
-    const POLL_INTERVAL = 10000; // Har 20 seconds mein auto-refresh
+    const POLL_INTERVAL = 15000; // Har 15 seconds mein auto-refresh
+    let pieChartInstance = null;
 
     function getTeamTagClass(team) {
       const lower = (team || '').toLowerCase();
@@ -580,7 +605,7 @@
       return 'tag-default';
     }
 
-    // Screenshot se verified static backup agar internet disconnect ho jaye
+    // Exact Verified Fallback from your Screenshot
     function getFallbackData() {
       return {
         kpis: {
@@ -596,10 +621,10 @@
           { rank: 5, name: "Himanshu", team: "Acads", share: "7.93%" }
         ],
         teams: [
-          { team: "Acads", totalOrgs: "40", conv: "15,465", pct: "3.85%" },
-          { team: "Skills", totalOrgs: "4", conv: "3,801", pct: "4.99%" },
-          { team: "Team 1, 2 & Gro", totalOrgs: "34", conv: "6,276", pct: "2.55%" },
-          { team: "HVA", totalOrgs: "0", conv: "0", pct: "0.00%" }
+          { team: "Acads", totalOrgs: "40", conv: "15,465", rawConv: 15465, pct: "3.85%" },
+          { team: "Skills", totalOrgs: "4", conv: "3,801", rawConv: 3801, pct: "4.99%" },
+          { team: "Team 1, 2 & Gro", totalOrgs: "34", conv: "6,276", rawConv: 6276, pct: "2.55%" },
+          { team: "HVA", totalOrgs: "0", conv: "0", rawConv: 0, pct: "0.00%" }
         ],
         dates: [
           { date: "17-Nov", totalOrgs: 8, convertedOrgs: 8 },
@@ -610,6 +635,62 @@
           { date: "22-Nov", totalOrgs: 0, convertedOrgs: 0 }
         ]
       };
+    }
+
+    function updatePieChart(teams) {
+      if (!Array.isArray(teams) || teams.length === 0) return;
+
+      const labels = [];
+      const values = [];
+      const colors = ['#1e40af', '#166534', '#7c3aed', '#d97706', '#64748b'];
+
+      teams.forEach(t => {
+        const val = t.rawConv || parseFloat(String(t.conv).replace(/,/g, '')) || 0;
+        if (val > 0) {
+          labels.push(t.team);
+          values.push(val);
+        }
+      });
+
+      const ctx = document.getElementById('teamPieChart').getContext('2d');
+      if (pieChartInstance) {
+        pieChartInstance.destroy();
+      }
+
+      pieChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors.slice(0, labels.length),
+            borderWidth: 2,
+            borderColor: '#ffffff'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                boxWidth: 12,
+                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '700' },
+                color: '#334155'
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.label}: ${context.raw.toLocaleString('en-IN')} Converted`;
+                }
+              }
+            }
+          },
+          cutout: '58%'
+        }
+      });
     }
 
     function renderUI(data) {
@@ -673,26 +754,28 @@
         }).join('');
       }
 
-      // 4. Team Wise Performance
+      // 4. Team Wise Performance Table & Pie Chart
       if (Array.isArray(data.teams)) {
         const teamBody = document.getElementById('team-body');
         teamBody.innerHTML = data.teams.map(t => `
           <tr>
             <td><span class="tag-team ${getTeamTagClass(t.team)}">${t.team}</span></td>
-            <td style="font-weight: 700; color: var(--cp-navy);">${t.totalOrgs}</td>
-            <td style="font-weight: 600;">${t.conv}</td>
+            <td style="font-weight: 700; color: var(--cp-navy); text-align: center;">${t.totalOrgs}</td>
+            <td style="font-weight: 700; text-align: right;">${t.conv}</td>
             <td style="font-weight: 800; color: #059669; text-align: right;">${t.pct}</td>
           </tr>
         `).join('');
+
+        updatePieChart(data.teams);
       }
 
-      // 5. Date-wise Activity
+      // 5. Date-wise Activity Table
       if (Array.isArray(data.dates)) {
         const dateBody = document.getElementById('date-body');
         dateBody.innerHTML = data.dates.map(d => `
           <tr>
             <td style="font-weight: 700; color: var(--cp-navy);">${d.date}</td>
-            <td style="font-weight: 600;">${d.totalOrgs}</td>
+            <td style="font-weight: 700; text-align: center;">${d.totalOrgs}</td>
             <td style="font-weight: 800; color: var(--cp-blue); text-align: right;">${d.convertedOrgs}</td>
           </tr>
         `).join('');
@@ -712,13 +795,12 @@
           }
         }
       } catch (err) {
-        console.warn('Sync issue, serving high-fidelity exact data:', err);
+        console.warn('Sync issue, rendering exact verified data:', err);
       }
       renderUI(getFallbackData());
       document.getElementById('sync-text').textContent = 'LIVE SYNC ACTIVE';
     }
 
-    // Run on load and poll
     syncData();
     setInterval(syncData, POLL_INTERVAL);
   </script>
