@@ -6,19 +6,19 @@
   <title>Classplus - Chatbot Campaign Live Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --cp-navy: #0f1d38;
+      --cp-navy: #091326;
       --cp-blue: #1456d1;
       --cp-blue-light: #e8f0fe;
       --cp-accent: #ff7a00;
-      --bg-page: #f8fafc;
-      --card-bg: #ffffff;
-      --border-color: #e2e8f0;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
+      --bg-page: #f1f5f9;
+      --card-bg: rgba(255, 255, 255, 0.88);
+      --border-color: rgba(226, 232, 240, 0.9);
+      --text-dark: #0f172a;
+      --text-muted: #475569;
     }
 
     * {
@@ -29,96 +29,107 @@
     }
 
     body {
-      background-color: var(--bg-page);
+      background: linear-gradient(135deg, #eef2f7 0%, #e2e8f0 100%);
       color: var(--text-dark);
       min-height: 100vh;
-      padding: 12px 20px;
+      padding: 10px 16px;
     }
 
-    /* Top Navigation */
+    /* --- CENTERED GLASSMORPHIC HEADER --- */
     .header-bar {
+      position: relative;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      background: #ffffff;
-      padding: 10px 20px;
-      border-radius: 14px;
-      box-shadow: 0 4px 18px rgba(15, 29, 56, 0.05);
-      border: 1px solid var(--border-color);
-      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      padding: 10px 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px rgba(15, 29, 56, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      margin-bottom: 8px;
     }
 
-    .logo-section {
+    .header-center-content {
       display: flex;
       align-items: center;
-      gap: 14px;
+      justify-content: center;
+      gap: 16px;
+      text-align: center;
     }
 
     .classplus-logo img {
-      height: 38px;
+      height: 44px;
       width: auto;
-      max-width: 160px;
+      max-width: 170px;
       object-fit: contain;
       display: block;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.06));
     }
 
-    .divider {
-      height: 26px;
-      width: 1px;
-      background-color: #cbd5e1;
+    .header-divider {
+      height: 32px;
+      width: 2px;
+      background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+      border-radius: 2px;
     }
 
     .campaign-title h1 {
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 23px;
+      font-weight: 900;
       color: var(--cp-navy);
-      letter-spacing: -0.3px;
-      line-height: 1.2;
+      letter-spacing: -0.4px;
+      line-height: 1.15;
     }
 
     .campaign-title span {
-      font-size: 11px;
+      font-size: 13px;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
+      letter-spacing: 0.2px;
     }
 
     .live-status {
+      position: absolute;
+      right: 20px;
       display: flex;
       align-items: center;
       gap: 8px;
-      background: #ecfdf5;
-      color: #059669;
+      background: rgba(236, 253, 245, 0.9);
+      color: #047857;
       padding: 6px 14px;
       border-radius: 999px;
-      font-size: 12px;
-      font-weight: 700;
-      border: 1px solid #a7f3d0;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid #6ee7b7;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);
     }
 
     .pulse {
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       background: #10b981;
       border-radius: 50%;
-      box-shadow: 0 0 8px #10b981;
+      box-shadow: 0 0 10px #10b981;
       animation: ripple 1.6s infinite;
     }
 
     @keyframes ripple {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.3; transform: scale(1.25); }
+      50% { opacity: 0.3; transform: scale(1.3); }
     }
 
-    /* --- TOP LIVE MOVING TICKER FEED --- */
+    /* --- TICKER FEED --- */
     .live-feed-strip {
-      background: #0f1d38;
-      border-radius: 10px;
-      padding: 8px 14px;
+      background: linear-gradient(90deg, #091326 0%, #0f1d38 100%);
+      border-radius: 12px;
+      padding: 7px 14px;
       display: flex;
       align-items: center;
       overflow: hidden;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 10px rgba(15, 29, 56, 0.12);
+      margin-bottom: 10px;
+      box-shadow: 0 4px 14px rgba(9, 19, 38, 0.18);
       border: 1px solid #1e293b;
     }
 
@@ -128,14 +139,14 @@
       gap: 6px;
       background: #ff7a00;
       color: #ffffff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 3px 10px;
-      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 900;
+      padding: 3px 12px;
+      border-radius: 7px;
       white-space: nowrap;
       margin-right: 14px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.6px;
       flex-shrink: 0;
     }
 
@@ -162,31 +173,33 @@
     .ticker-item {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      color: #f8fafc;
-      font-size: 12px;
-      font-weight: 600;
-      margin-right: 28px;
+      gap: 7px;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-right: 32px;
     }
 
-    .ticker-item .highlight-name { color: #67e8f9; font-weight: 700; }
-    .ticker-item .highlight-val { color: #facc15; font-weight: 800; }
-    .ticker-dot { color: #64748b; margin-right: 28px; }
+    .ticker-item .highlight-name { color: #38bdf8; font-weight: 800; }
+    .ticker-item .highlight-val { color: #facc15; font-weight: 900; }
+    .ticker-dot { color: #64748b; margin-right: 32px; }
 
-    /* --- 3 KPI Cards Grid --- */
+    /* --- 3 KPI CARDS (LARGER & COMPACT) --- */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 10px;
     }
 
     .kpi-card {
-      background: #ffffff;
-      border-radius: 12px;
-      padding: 14px 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 14px;
+      padding: 12px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 16px rgba(15, 29, 56, 0.04);
       position: relative;
       overflow: hidden;
       display: flex;
@@ -200,7 +213,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
+      height: 4px;
     }
 
     .kpi-card.blue::before { background: var(--cp-blue); }
@@ -208,54 +221,57 @@
     .kpi-card.success::before { background: #10b981; }
 
     .kpi-title {
-      font-size: 11.5px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 800;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
     }
 
     .kpi-value {
-      font-size: 24px;
-      font-weight: 800;
+      font-size: 28px;
+      font-weight: 900;
       color: var(--cp-navy);
-      margin-top: 3px;
+      margin-top: 2px;
+      letter-spacing: -0.5px;
     }
 
-    /* Main Dashboard Layout */
+    /* --- LAYOUT GRID --- */
     .dashboard-layout {
       display: grid;
-      grid-template-columns: 460px 1fr;
-      gap: 14px;
+      grid-template-columns: 470px 1fr;
+      gap: 12px;
       align-items: start;
     }
 
     .left-stack, .right-stack {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .panel-card {
-      background: var(--card-bg);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       border-radius: 14px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 18px rgba(15, 29, 56, 0.04);
       overflow: hidden;
     }
 
     .panel-header {
-      padding: 12px 18px;
-      background: #ffffff;
-      border-bottom: 1px solid var(--border-color);
+      padding: 11px 18px;
+      background: rgba(255, 255, 255, 0.95);
+      border-bottom: 1px solid #e2e8f0;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     .panel-header h3 {
-      font-size: 14.5px;
-      font-weight: 800;
+      font-size: 16px;
+      font-weight: 900;
       color: var(--cp-navy);
       display: flex;
       align-items: center;
@@ -265,22 +281,22 @@
     .badge-count {
       background: var(--cp-blue-light);
       color: var(--cp-blue);
-      font-size: 11px;
-      padding: 2px 8px;
+      font-size: 12px;
+      padding: 3px 10px;
       border-radius: 20px;
-      font-weight: 700;
+      font-weight: 800;
     }
 
-    /* Leaderboard Headers & Rows */
+    /* --- LEADERBOARD --- */
     .leaderboard-table-header {
       display: grid;
-      grid-template-columns: 46px 1.3fr 1.3fr 75px;
-      padding: 9px 14px;
+      grid-template-columns: 50px 1.35fr 1.3fr 85px;
+      padding: 8px 14px;
       background: #f8fafc;
-      border-bottom: 1px solid var(--border-color);
-      font-size: 11px;
-      font-weight: 800;
-      color: #64748b;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 12px;
+      font-weight: 900;
+      color: #475569;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -288,19 +304,19 @@
     .leaderboard-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      padding: 10px 12px;
-      max-height: 290px;
+      gap: 5px;
+      padding: 8px 10px;
+      max-height: 275px;
       overflow-y: auto;
     }
 
     .leaderboard-item {
       display: grid;
-      grid-template-columns: 46px 1.3fr 1.3fr 75px;
+      grid-template-columns: 50px 1.35fr 1.3fr 85px;
       align-items: center;
-      padding: 8px;
+      padding: 7px 8px;
       border-radius: 9px;
-      border: 1px solid #edf2f7;
+      border: 1px solid #e2e8f0;
       background: #ffffff;
       transition: all 0.15s ease-in-out;
     }
@@ -316,25 +332,25 @@
     }
 
     .rank-num {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      font-size: 12px;
+      font-weight: 900;
+      font-size: 13.5px;
       background: #f1f5f9;
-      color: #475569;
+      color: #334155;
     }
 
     .rank-1 .rank-num { background: #fbbf24; color: #78350f; }
-    .rank-2 .rank-num { background: #e2e8f0; color: #1e293b; }
+    .rank-2 .rank-num { background: #e2e8f0; color: #0f172a; }
     .rank-3 .rank-num { background: #ffedd5; color: #9a3412; }
 
     .name-text {
-      font-size: 13.5px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 800;
       color: var(--cp-navy);
       white-space: nowrap;
       overflow: hidden;
@@ -343,8 +359,8 @@
     }
 
     .percent-val {
-      font-size: 13.5px;
-      font-weight: 800;
+      font-size: 15.5px;
+      font-weight: 900;
       color: var(--cp-blue);
       text-align: right;
     }
@@ -352,14 +368,14 @@
     /* Tag styles */
     .tag-team {
       display: inline-block;
-      padding: 3px 8px;
-      border-radius: 5px;
-      font-size: 10.5px;
-      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 800;
       text-transform: capitalize;
       letter-spacing: 0.2px;
       white-space: nowrap;
-      max-width: 130px;
+      max-width: 140px;
       overflow: hidden;
       text-overflow: ellipsis;
     }
@@ -367,104 +383,119 @@
     .tag-skills { background: #dcfce7; color: #166534; }
     .tag-growth { background: #f3e8ff; color: #6b21a8; }
     .tag-hva { background: #fef3c7; color: #92400e; }
-    .tag-default { background: #f1f5f9; color: #475569; }
+    .tag-default { background: #f1f5f9; color: #334155; }
 
-    /* Pie Chart Container */
     .chart-box {
-      padding: 14px 16px;
+      padding: 10px 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 220px;
+      height: 205px;
     }
 
-    /* Balanced Team Table */
-    .table-responsive {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 13.5px;
-      table-layout: fixed;
-    }
-
+    /* --- TEAM TABLE --- */
+    .table-responsive { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed; }
     th {
       background: #f8fafc;
-      padding: 12px 16px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #64748b;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #475569;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
-      border-bottom: 1px solid var(--border-color);
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #e2e8f0;
     }
-
     td {
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid #f1f5f9;
-      color: #1e293b;
-      font-weight: 600;
+      color: #0f172a;
+      font-size: 15px;
+      font-weight: 700;
     }
-
     .col-team { width: 30%; }
     .col-orgs { width: 22%; text-align: center; }
     .col-conv { width: 26%; text-align: right; }
     .col-pct { width: 22%; text-align: right; }
-
     tr:hover td { background: #f8faff; }
 
-    /* --- HORIZONTAL DATE & ORGS CONVERTED TIMELINE --- */
-    .timeline-container {
-      padding: 16px 20px;
+    /* --- VERTICAL BATCHES (TIGHT & BOLD) --- */
+    .batches-container {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       overflow-x: auto;
     }
 
-    .timeline-grid {
-      display: grid;
-      grid-template-columns: 140px repeat(8, minmax(75px, 1fr));
+    .batch-headers-col {
+      display: flex;
+      flex-direction: column;
       gap: 8px;
-      align-items: center;
+      min-width: 140px;
+      flex-shrink: 0;
     }
 
-    .timeline-row-header {
-      font-size: 12.5px;
-      font-weight: 800;
+    .batch-header-label {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      font-size: 13.5px;
+      font-weight: 900;
       color: var(--cp-navy);
       text-transform: uppercase;
       letter-spacing: 0.4px;
-      padding: 10px 0;
     }
 
-    .timeline-col-head {
+    .batch-cards-track {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-grow: 1;
+    }
+
+    .vertical-day-card {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 78px;
+      flex: 1;
+    }
+
+    .date-pill-top {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #1e293b;
       text-align: center;
-      padding: 8px 6px;
-      font-size: 12px;
-      font-weight: 800;
-      color: #334155;
     }
 
-    .timeline-col-val {
+    .count-pill-bottom {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #ffffff;
       border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      text-align: center;
-      padding: 10px 6px;
-      font-size: 16px;
-      font-weight: 800;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 900;
       color: var(--cp-blue);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      text-align: center;
     }
 
-    .timeline-col-val.highlight {
+    .count-pill-bottom.highlight {
       background: #eff6ff;
-      border-color: #93c5fd;
+      border-color: #60a5fa;
       color: #1d4ed8;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
     }
 
     ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -473,20 +504,22 @@
     @media (max-width: 990px) {
       .dashboard-layout { grid-template-columns: 1fr; }
       .kpi-grid { grid-template-columns: 1fr; }
+      .live-status { position: static; margin-top: 8px; }
+      .header-bar { flex-direction: column; gap: 8px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Bar -->
+  <!-- CENTERED GLASSMORPHIC HEADER -->
   <div class="header-bar">
-    <div class="logo-section">
+    <div class="header-center-content">
       <div class="classplus-logo">
         <img id="logo-img" src="logo.png" alt="Classplus Logo" onerror="this.onerror=null; this.src='\image.png';" />
       </div>
-      <div class="divider"></div>
+      <div class="header-divider"></div>
       <div class="campaign-title">
-        <h1>CHAT BOT CAMPAIGN</h1>
+        <h1>CHATBOT CAMPAIGN</h1>
         <span>Live Performance, Conversions & Operational Analytics</span>
       </div>
     </div>
@@ -500,12 +533,10 @@
   <!-- Live Moving Ticker Feed -->
   <div class="live-feed-strip">
     <div class="live-feed-badge">
-      <span style="font-size: 10px;">⚡</span> LIVE ACTIVITY FEED
+      <span style="font-size: 11px;">⚡</span> LIVE ACTIVITY FEED
     </div>
     <div class="ticker-viewport">
-      <div class="ticker-content" id="ticker-track">
-        <!-- Rendered dynamically -->
-      </div>
+      <div class="ticker-content" id="ticker-track"></div>
     </div>
   </div>
 
@@ -516,21 +547,21 @@
         <div class="kpi-title">Transaction Converted</div>
         <div class="kpi-value" id="kpi-converted">--</div>
       </div>
-      <div style="font-size: 24px;">🎯</div>
+      <div style="font-size: 28px;">🎯</div>
     </div>
     <div class="kpi-card accent">
       <div>
         <div class="kpi-title">Revenue Expected (₹)</div>
         <div class="kpi-value" id="kpi-revenue">--</div>
       </div>
-      <div style="font-size: 24px;">💰</div>
+      <div style="font-size: 28px;">💰</div>
     </div>
     <div class="kpi-card success">
       <div>
         <div class="kpi-title">Average Conversion Rate</div>
         <div class="kpi-value" id="kpi-conv">--</div>
       </div>
-      <div style="font-size: 24px;">📈</div>
+      <div style="font-size: 28px;">📈</div>
     </div>
   </div>
 
@@ -553,15 +584,13 @@
           <div style="text-align: right;">% Conv.</div>
         </div>
 
-        <div class="leaderboard-list" id="performer-list">
-          <!-- Dynamically rendered -->
-        </div>
+        <div class="leaderboard-list" id="performer-list"></div>
       </div>
 
       <div class="panel-card">
         <div class="panel-header">
           <h3>📊 Team-Wise Conversion Share</h3>
-          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Share %</span>
+          <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Share %</span>
         </div>
         <div class="chart-box">
           <canvas id="teamPieChart"></canvas>
@@ -570,14 +599,14 @@
 
     </div>
 
-    <!-- RIGHT: Team Performance & Horizontal Date Tracker -->
+    <!-- RIGHT: Team Performance & Vertical Batches Tracker -->
     <div class="right-stack">
 
       <!-- 1. Team Wise Performance Table -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>👥 Team Wise Performance</h3>
-          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Orgs vs Converted</span>
+          <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Orgs vs Converted</span>
         </div>
         <div class="table-responsive">
           <table>
@@ -589,23 +618,25 @@
                 <th class="col-pct">Percentage of Converted</th>
               </tr>
             </thead>
-            <tbody id="team-body">
-              <!-- Dynamically rendered -->
-            </tbody>
+            <tbody id="team-body"></tbody>
           </table>
         </div>
       </div>
 
-      <!-- 2. Horizontal Date & Orgs Converted Section (17-Nov to 24-Nov) -->
+      <!-- 2. Vertical Batches: Upar Date, Niche Orgs Converted -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>📅 Daily Timeline Activity (17-Nov to 24-Nov)</h3>
-          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Campaign Days</span>
+          <span style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Campaign Batches</span>
         </div>
-        <div class="timeline-container">
-          <div class="timeline-grid" id="timeline-grid">
-            <!-- Dynamically populated rows: Header, Date Row, Orgs Converted Row -->
+        <div class="batches-container">
+          <!-- Left Header Titles -->
+          <div class="batch-headers-col">
+            <div class="batch-header-label">📅 Date</div>
+            <div class="batch-header-label">🎯 Orgs Converted</div>
           </div>
+          <!-- Right Vertical Batches Cards Track -->
+          <div class="batch-cards-track" id="batch-cards-track"></div>
         </div>
       </div>
 
@@ -627,13 +658,13 @@
       return 'tag-default';
     }
 
-    // Exact Verified Data from your Screenshot (17-Nov to 24-Nov)[cite: 4]
+    // Exact Verified Fallback from Sheet[cite: 7]
     function getFallbackData() {
       return {
         kpis: {
-          txnsConverted: "29,240",
-          revenue: "₹2,92,400",
-          convRate: "4.00%"
+          txnsConverted: "29,301",
+          revenue: "₹2,93,010",
+          convRate: "4.01%"
         },
         performers: [
           { rank: 1, name: "Rahul", team: "Skills", share: "32.05%" },
@@ -645,7 +676,7 @@
         teams: [
           { team: "Acads", totalOrgs: "40", conv: "15,465", rawConv: 15465, pct: "3.85%" },
           { team: "Skills", totalOrgs: "7", conv: "7,499", rawConv: 7499, pct: "9.84%" },
-          { team: "Team 1, 2 & Gro", totalOrgs: "34", conv: "6,276", rawConv: 6276, pct: "2.55%" },
+          { team: "Team 1, 2 & Gro", totalOrgs: "35", conv: "6,337", rawConv: 6337, pct: "2.58%" },
           { team: "HVA", totalOrgs: "0", conv: "0", rawConv: 0, pct: "0.00%" }
         ],
         dates: [
@@ -653,7 +684,7 @@
           { date: "18-Nov", convertedOrgs: 8 },
           { date: "19-Nov", convertedOrgs: 10 },
           { date: "20-Nov", convertedOrgs: 25 },
-          { date: "21-Nov", convertedOrgs: 30 },
+          { date: "21-Nov", convertedOrgs: 31 },
           { date: "22-Nov", convertedOrgs: 0 },
           { date: "23-Nov", convertedOrgs: 0 },
           { date: "24-Nov", convertedOrgs: 0 }
@@ -677,9 +708,7 @@
       });
 
       const ctx = document.getElementById('teamPieChart').getContext('2d');
-      if (pieChartInstance) {
-        pieChartInstance.destroy();
-      }
+      if (pieChartInstance) pieChartInstance.destroy();
 
       pieChartInstance = new Chart(ctx, {
         type: 'doughnut',
@@ -699,9 +728,9 @@
             legend: {
               position: 'right',
               labels: {
-                boxWidth: 12,
-                font: { family: "'Plus Jakarta Sans', sans-serif", size: 11, weight: '700' },
-                color: '#334155'
+                boxWidth: 14,
+                font: { family: "'Plus Jakarta Sans', sans-serif", size: 12.5, weight: '800' },
+                color: '#1e293b'
               }
             },
             tooltip: {
@@ -727,7 +756,7 @@
         document.getElementById('kpi-conv').textContent = data.kpis.convRate || '0.00%';
       }
 
-      // 2. Ticker
+      // 2. Ticker Feed
       const tickerTrack = document.getElementById('ticker-track');
       let tickerItems = [];
 
@@ -778,49 +807,55 @@
         }).join('');
       }
 
-      // 4. Team Table & Pie Chart
+      // 4. Team Table
       if (Array.isArray(data.teams)) {
+        const validTeams = data.teams.filter(t => {
+          const lower = (t.team || '').toLowerCase();
+          return !lower.includes('target') && !lower.includes('transaction') && !lower.includes('pending') && !lower.includes('revenue') && !lower.includes('vikash');
+        });
+
         const teamBody = document.getElementById('team-body');
-        teamBody.innerHTML = data.teams.map(t => `
+        teamBody.innerHTML = validTeams.map(t => `
           <tr>
             <td><span class="tag-team ${getTeamTagClass(t.team)}">${t.team}</span></td>
-            <td style="font-weight: 700; color: var(--cp-navy); text-align: center;">${t.totalOrgs}</td>
-            <td style="font-weight: 700; text-align: right;">${t.conv}</td>
-            <td style="font-weight: 800; color: #059669; text-align: right;">${t.pct}</td>
+            <td style="font-weight: 800; color: var(--cp-navy); text-align: center;">${t.totalOrgs}</td>
+            <td style="font-weight: 800; text-align: right;">${t.conv}</td>
+            <td style="font-weight: 900; color: #059669; text-align: right;">${t.pct}</td>
           </tr>
         `).join('');
 
-        updatePieChart(data.teams);
+        updatePieChart(validTeams);
       }
 
-      // 5. Horizontal Timeline Activity (Row 1: Date, Row 2: Orgs Converted)
+      // 5. Vertical Batches (17-Nov to 24-Nov)[cite: 7]
       if (Array.isArray(data.dates) && data.dates.length > 0) {
-        // Sirf 17-Nov se 24-Nov ensure karein
-        const targetDates = ["17-Nov", "18-Nov", "19-Nov", "20-Nov", "21-Nov", "22-Nov", "23-Nov", "24-Nov"];
-        
-        let dateMap = {};
-        data.dates.forEach(d => {
-          dateMap[d.date] = d.convertedOrgs;
+        const targetDays = [17, 18, 19, 20, 21, 22, 23, 24];
+        let dayToCountMap = {};
+
+        data.dates.forEach(item => {
+          const numMatch = String(item.date).match(/\d+/);
+          if (numMatch) {
+            const dayNum = parseInt(numMatch[0]);
+            dayToCountMap[dayNum] = item.convertedOrgs;
+          }
         });
 
-        const timelineGrid = document.getElementById('timeline-grid');
+        const cardsTrack = document.getElementById('batch-cards-track');
         let html = '';
 
-        // Row 1: Header + Dates
-        html += `<div class="timeline-row-header">📅 Date</div>`;
-        targetDates.forEach(dt => {
-          html += `<div class="timeline-col-head">${dt}</div>`;
-        });
-
-        // Row 2: Header + Orgs Converted Values
-        html += `<div class="timeline-row-header">🎯 Orgs Converted</div>`;
-        targetDates.forEach(dt => {
-          const val = dateMap[dt] !== undefined ? dateMap[dt] : 0;
+        targetDays.forEach(day => {
+          const val = dayToCountMap[day] !== undefined ? dayToCountMap[day] : 0;
           const isHighlight = val > 0 ? 'highlight' : '';
-          html += `<div class="timeline-col-val ${isHighlight}">${val}</div>`;
+
+          html += `
+            <div class="vertical-day-card">
+              <div class="date-pill-top">${day}-Nov</div>
+              <div class="count-pill-bottom ${isHighlight}">${val}</div>
+            </div>
+          `;
         });
 
-        timelineGrid.innerHTML = html;
+        cardsTrack.innerHTML = html;
       }
     }
 
@@ -836,7 +871,7 @@
           }
         }
       } catch (err) {
-        console.warn('Sync issue, serving exact screenshot verified data:', err);
+        console.warn('Sync issue, serving fallback data:', err);
       }
       renderUI(getFallbackData());
       document.getElementById('sync-text').textContent = 'LIVE SYNC ACTIVE';
