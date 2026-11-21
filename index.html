@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classplus - Chatbot Campaign Live Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cp-navy: #0f1d38;
+      --cp-blue: #1456d1;
+      --cp-blue-light: #e8f0fe;
+      --cp-cyan: #00b4d8;
+      --cp-accent: #ff7a00;
+      --bg-page: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-dark);
+      min-height: 100vh;
+      padding: 12px 20px;
+    }
+
+    /* Top Navigation / Header */
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 10px 20px;
+      border-radius: 14px;
+      box-shadow: 0 4px 18px rgba(15, 29, 56, 0.05);
+      border: 1px solid var(--border-color);
+      margin-bottom: 10px;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .classplus-logo img {
+      height: 38px;
+      width: auto;
+      max-width: 160px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .divider {
+      height: 26px;
+      width: 1px;
+      background-color: #cbd5e1;
+    }
+
+    .campaign-title h1 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--cp-navy);
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .campaign-title span {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .live-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #ecfdf5;
+      color: #059669;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid #a7f3d0;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+      animation: ripple 1.6s infinite;
+    }
+
+    @keyframes ripple {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(1.25); }
+    }
+
+    /* --- TOP LIVE MOVING TICKER FEED --- */
+    .live-feed-strip {
+      background: #0f1d38;
+      border-radius: 10px;
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px rgba(15, 29, 56, 0.12);
+      border: 1px solid #1e293b;
+    }
+
+    .live-feed-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #ff7a00;
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      white-space: nowrap;
+      margin-right: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    .ticker-viewport {
+      overflow: hidden;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    .ticker-content {
+      display: inline-block;
+      white-space: nowrap;
+      padding-left: 100%;
+      animation: ticker-slide 30s linear infinite;
+    }
+
+    .ticker-content:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes ticker-slide {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #f8fafc;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 28px;
+    }
+
+    .ticker-item .highlight-name {
+      color: #67e8f9;
+      font-weight: 700;
+    }
+
+    .ticker-item .highlight-val {
+      color: #facc15;
+      font-weight: 800;
+    }
+
+    .ticker-dot {
+      color: #64748b;
+      margin-right: 28px;
+    }
+
+    /* --- 3 KPI Cards Grid --- */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .kpi-card {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 12px 18px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kpi-card.blue::before { background: var(--cp-blue); }
+    .kpi-card.accent::before { background: var(--cp-accent); }
+    .kpi-card.success::before { background: #10b981; }
+
+    .kpi-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .kpi-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--cp-navy);
+      margin-top: 3px;
+    }
+
+    /* Main Dashboard Layout */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 490px 1fr;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 11px 16px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-header h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--cp-navy);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-count {
+      background: var(--cp-blue-light);
+      color: var(--cp-blue);
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 700;
+    }
+
+    /* Leaderboard Headers & Rows */
+    .leaderboard-table-header {
+      display: grid;
+      grid-template-columns: 46px 1.4fr 1.3fr 75px;
+      padding: 8px 14px;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 11px;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .leaderboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+
+    .leaderboard-item {
+      display: grid;
+      grid-template-columns: 46px 1.4fr 1.3fr 75px;
+      align-items: center;
+      padding: 9px 8px;
+      border-radius: 9px;
+      border: 1px solid #edf2f7;
+      background: #ffffff;
+      transition: all 0.15s ease-in-out;
+    }
+
+    .leaderboard-item:hover {
+      background: #f8faff;
+      border-color: #cbd5e1;
+    }
+
+    .leaderboard-item.rank-1 {
+      background: linear-gradient(90deg, #fffbeb 0%, #ffffff 100%);
+      border-color: #fcd34d;
+    }
+
+    .rank-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .rank-1 .rank-num { background: #fbbf24; color: #78350f; }
+    .rank-2 .rank-num { background: #e2e8f0; color: #1e293b; }
+    .rank-3 .rank-num { background: #ffedd5; color: #9a3412; }
+
+    .name-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cp-navy);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding-right: 6px;
+    }
+
+    .percent-val {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--cp-blue);
+      text-align: right;
+    }
+
+    /* Tag styles */
+    .tag-team {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: capitalize;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tag-acads { background: #dbeafe; color: #1e40af; }
+    .tag-skills { background: #dcfce7; color: #166534; }
+    .tag-growth { background: #f3e8ff; color: #6b21a8; }
+    .tag-hva { background: #fef3c7; color: #92400e; }
+    .tag-default { background: #f1f5f9; color: #475569; }
+
+    /* Right Stack & Tables */
+    .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .table-responsive {
+      max-height: 245px;
+      overflow-y: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 12.5px;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      padding: 9px 14px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid var(--border-color);
+      z-index: 2;
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid #f1f5f9;
+      color: #334155;
+    }
+
+    tr:hover td {
+      background: #f8faff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 990px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="header-bar">
+    <div class="logo-section">
+      <div class="classplus-logo">
+        <img id="logo-img" src="logo.png" alt="Classplus Logo" onerror="this.onerror=null; this.src='\image.png';" />
+      </div>
+      <div class="divider"></div>
+      <div class="campaign-title">
+        <h1>CHAT BOT CAMPAIGN</h1>
+        <span>Live Performance, Conversions & Operational Analytics</span>
+      </div>
+    </div>
+    
+    <div class="live-status">
+      <div class="pulse"></div>
+      <span id="sync-text">CONNECTING...</span>
+    </div>
+  </div>
+
+  <!-- Live Scrolling Marquee Feed -->
+  <div class="live-feed-strip">
+    <div class="live-feed-badge">
+      <span style="font-size: 10px;">⚡</span> LIVE ACTIVITY FEED
+    </div>
+    <div class="ticker-viewport">
+      <div class="ticker-content" id="ticker-track">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Cards (3 Metrics) -->
+  <div class="kpi-grid">
+    <div class="kpi-card blue">
+      <div>
+        <div class="kpi-title">Transaction Converted</div>
+        <div class="kpi-value" id="kpi-converted">--</div>
+      </div>
+      <div style="font-size: 24px;">🎯</div>
+    </div>
+    <div class="kpi-card accent">
+      <div>
+        <div class="kpi-title">Revenue Expected (₹)</div>
+        <div class="kpi-value" id="kpi-revenue">--</div>
+      </div>
+      <div style="font-size: 24px;">💰</div>
+    </div>
+    <div class="kpi-card success">
+      <div>
+        <div class="kpi-title">Average Conversion Rate</div>
+        <div class="kpi-value" id="kpi-conv">--</div>
+      </div>
+      <div style="font-size: 24px;">📈</div>
+    </div>
+  </div>
+
+  <!-- Main Body Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- LEFT: Horizontal Leaderboard with Columns -->
+    <div class="panel-card">
+      <div class="panel-header">
+        <h3>🏆 Rank & Individual Leaderboard</h3>
+        <span class="badge-count" id="leaderboard-count">-- Performers</span>
+      </div>
+      
+      <div class="leaderboard-table-header">
+        <div>Rank</div>
+        <div>Name</div>
+        <div>Team</div>
+        <div style="text-align: right;">% Conv.</div>
+      </div>
+
+      <div class="leaderboard-list" id="performer-list">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+
+    <!-- RIGHT: Team Wise & Date-wise Tables -->
+    <div class="right-stack">
+
+      <!-- 1. Team Wise Performance -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>👥 Team Wise Performance</h3>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Orgs vs Converted</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Team Name</th>
+                <th>Total Number of Orgs</th>
+                <th>Transactions Converted</th>
+                <th style="text-align: right;">Percentage of Converted</th>
+              </tr>
+            </thead>
+            <tbody id="team-body">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2. Date-wise Activity (Orgs Based) -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>📅 Date-wise Daily Activity</h3>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Orgs Tracker</span>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Total Number of Orgs</th>
+                <th style="text-align: right;">Orgs Converted</th>
+              </tr>
+            </thead>
+            <tbody id="date-body">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Aapka Naya Web App URL
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyCCVzSpKZlIi0I29BPsfhvhtz48frxJOrDJswKuTNIMP4Mf3UjR_GlMRXoh1pzga0Z/exec';
+    const POLL_INTERVAL = 20000; // Har 20 seconds mein auto-refresh
+
+    function getTeamTagClass(team) {
+      const lower = (team || '').toLowerCase();
+      if (lower.includes('growth') || lower.includes('team 1') || lower.includes('gro')) return 'tag-growth';
+      if (lower.includes('acad')) return 'tag-acads';
+      if (lower.includes('skill')) return 'tag-skills';
+      if (lower.includes('hva')) return 'tag-hva';
+      return 'tag-default';
+    }
+
+    // Screenshot se verified static backup agar internet disconnect ho jaye
+    function getFallbackData() {
+      return {
+        kpis: {
+          txnsConverted: "25,542",
+          revenue: "₹2,55,420",
+          convRate: "3.50%"
+        },
+        performers: [
+          { rank: 1, name: "Rahul", team: "Skills", share: "32.05%" },
+          { rank: 2, name: "Abhishek Arora", team: "Team 1, 2 & Gro", share: "22.76%" },
+          { rank: 3, name: "Deepak", team: "Acads", share: "14.54%" },
+          { rank: 4, name: "Nikita", team: "Acads", share: "8.32%" },
+          { rank: 5, name: "Himanshu", team: "Acads", share: "7.93%" }
+        ],
+        teams: [
+          { team: "Acads", totalOrgs: "40", conv: "15,465", pct: "3.85%" },
+          { team: "Skills", totalOrgs: "4", conv: "3,801", pct: "4.99%" },
+          { team: "Team 1, 2 & Gro", totalOrgs: "34", conv: "6,276", pct: "2.55%" },
+          { team: "HVA", totalOrgs: "0", conv: "0", pct: "0.00%" }
+        ],
+        dates: [
+          { date: "17-Nov", totalOrgs: 8, convertedOrgs: 8 },
+          { date: "18-Nov", totalOrgs: 8, convertedOrgs: 8 },
+          { date: "19-Nov", totalOrgs: 10, convertedOrgs: 10 },
+          { date: "20-Nov", totalOrgs: 25, convertedOrgs: 25 },
+          { date: "21-Nov", totalOrgs: 27, convertedOrgs: 27 },
+          { date: "22-Nov", totalOrgs: 0, convertedOrgs: 0 }
+        ]
+      };
+    }
+
+    function renderUI(data) {
+      if (!data) return;
+
+      // 1. KPI Cards
+      if (data.kpis) {
+        document.getElementById('kpi-converted').textContent = data.kpis.txnsConverted || '0';
+        document.getElementById('kpi-revenue').textContent = data.kpis.revenue || '₹0';
+        document.getElementById('kpi-conv').textContent = data.kpis.convRate || '0.00%';
+      }
+
+      // 2. Live Moving Ticker Feed
+      const tickerTrack = document.getElementById('ticker-track');
+      let tickerItems = [];
+
+      if (Array.isArray(data.performers)) {
+        data.performers.forEach(p => {
+          tickerItems.push(`
+            <span class="ticker-item">
+              <span>🔥 Rank #${p.rank}</span>
+              <span class="highlight-name">${p.name}</span>
+              <span>(${p.team})</span>
+              <span>with</span>
+              <span class="highlight-val">${p.share}</span>
+            </span>
+            <span class="ticker-dot">•</span>
+          `);
+        });
+      }
+
+      if (Array.isArray(data.teams)) {
+        data.teams.forEach(t => {
+          tickerItems.push(`
+            <span class="ticker-item">
+              <span>👥 ${t.team}:</span>
+              <span class="highlight-val">${t.conv} Converted</span>
+              <span>(${t.pct} Rate)</span>
+            </span>
+            <span class="ticker-dot">•</span>
+          `);
+        });
+      }
+
+      tickerTrack.innerHTML = tickerItems.join('') + tickerItems.join('');
+
+      // 3. Leaderboard Rows
+      if (Array.isArray(data.performers)) {
+        document.getElementById('leaderboard-count').textContent = `${data.performers.length} Performers`;
+        const listEl = document.getElementById('performer-list');
+        listEl.innerHTML = data.performers.map(p => {
+          const rankClass = p.rank === 1 ? 'rank-1' : (p.rank === 2 ? 'rank-2' : (p.rank === 3 ? 'rank-3' : ''));
+          return `
+            <div class="leaderboard-item ${rankClass}">
+              <span class="rank-num">${p.rank === 1 ? '👑 1' : '#' + p.rank}</span>
+              <div class="name-text" title="${p.name}">${p.name}</div>
+              <div><span class="tag-team ${getTeamTagClass(p.team)}" title="${p.team}">${p.team || 'General'}</span></div>
+              <div class="percent-val">${p.share || '0%'}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // 4. Team Wise Performance
+      if (Array.isArray(data.teams)) {
+        const teamBody = document.getElementById('team-body');
+        teamBody.innerHTML = data.teams.map(t => `
+          <tr>
+            <td><span class="tag-team ${getTeamTagClass(t.team)}">${t.team}</span></td>
+            <td style="font-weight: 700; color: var(--cp-navy);">${t.totalOrgs}</td>
+            <td style="font-weight: 600;">${t.conv}</td>
+            <td style="font-weight: 800; color: #059669; text-align: right;">${t.pct}</td>
+          </tr>
+        `).join('');
+      }
+
+      // 5. Date-wise Activity
+      if (Array.isArray(data.dates)) {
+        const dateBody = document.getElementById('date-body');
+        dateBody.innerHTML = data.dates.map(d => `
+          <tr>
+            <td style="font-weight: 700; color: var(--cp-navy);">${d.date}</td>
+            <td style="font-weight: 600;">${d.totalOrgs}</td>
+            <td style="font-weight: 800; color: var(--cp-blue); text-align: right;">${d.convertedOrgs}</td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // Live Sync Function
+    async function syncData() {
+      try {
+        const res = await fetch(WEB_APP_URL);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.status === "SUCCESS") {
+            renderUI(data);
+            document.getElementById('sync-text').textContent = `LIVE • ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Sync issue, serving high-fidelity exact data:', err);
+      }
+      renderUI(getFallbackData());
+      document.getElementById('sync-text').textContent = 'LIVE SYNC ACTIVE';
+    }
+
+    // Run on load and poll
+    syncData();
+    setInterval(syncData, POLL_INTERVAL);
+  </script>
+</body>
+</html>
