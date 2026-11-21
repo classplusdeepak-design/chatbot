@@ -7,14 +7,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <!-- Chart.js for Clean Pie Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
       --cp-navy: #0f1d38;
       --cp-blue: #1456d1;
       --cp-blue-light: #e8f0fe;
-      --cp-cyan: #00b4d8;
       --cp-accent: #ff7a00;
       --bg-page: #f8fafc;
       --card-bg: #ffffff;
@@ -37,7 +35,7 @@
       padding: 12px 20px;
     }
 
-    /* Top Navigation / Header */
+    /* Top Navigation */
     .header-bar {
       display: flex;
       justify-content: space-between;
@@ -111,7 +109,7 @@
       50% { opacity: 0.3; transform: scale(1.25); }
     }
 
-    /* --- TOP LIVE MOVING TICKER FEED (Adjusted Slow Speed) --- */
+    /* --- TOP LIVE MOVING TICKER FEED --- */
     .live-feed-strip {
       background: #0f1d38;
       border-radius: 10px;
@@ -151,12 +149,10 @@
       display: inline-block;
       white-space: nowrap;
       padding-left: 100%;
-      animation: ticker-slide 70s linear infinite; /* Readable slow speed */
+      animation: ticker-slide 70s linear infinite;
     }
 
-    .ticker-content:hover {
-      animation-play-state: paused;
-    }
+    .ticker-content:hover { animation-play-state: paused; }
 
     @keyframes ticker-slide {
       0% { transform: translate3d(0, 0, 0); }
@@ -379,11 +375,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
       height: 220px;
     }
 
-    /* Clean Proportional Tables (Eliminating Huge White Gaps) */
+    /* Balanced Team Table */
     .table-responsive {
       overflow-x: auto;
     }
@@ -393,12 +388,12 @@
       border-collapse: collapse;
       text-align: left;
       font-size: 13.5px;
-      table-layout: fixed; /* Prevents uneven gaps */
+      table-layout: fixed;
     }
 
     th {
       background: #f8fafc;
-      padding: 11px 16px;
+      padding: 12px 16px;
       font-size: 11px;
       font-weight: 700;
       color: #64748b;
@@ -414,28 +409,66 @@
       font-weight: 600;
     }
 
-    /* Column Width Balancing */
     .col-team { width: 30%; }
     .col-orgs { width: 22%; text-align: center; }
     .col-conv { width: 26%; text-align: right; }
     .col-pct { width: 22%; text-align: right; }
 
-    .col-date { width: 35%; }
-    .col-d-orgs { width: 35%; text-align: center; }
-    .col-d-conv { width: 30%; text-align: right; }
+    tr:hover td { background: #f8faff; }
 
-    tr:hover td {
-      background: #f8faff;
+    /* --- HORIZONTAL DATE & ORGS CONVERTED TIMELINE --- */
+    .timeline-container {
+      padding: 16px 20px;
+      overflow-x: auto;
     }
 
-    ::-webkit-scrollbar {
-      width: 5px;
-      height: 5px;
+    .timeline-grid {
+      display: grid;
+      grid-template-columns: 140px repeat(8, minmax(75px, 1fr));
+      gap: 8px;
+      align-items: center;
     }
-    ::-webkit-scrollbar-thumb {
-      background-color: #cbd5e1;
-      border-radius: 4px;
+
+    .timeline-row-header {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--cp-navy);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 10px 0;
     }
+
+    .timeline-col-head {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      text-align: center;
+      padding: 8px 6px;
+      font-size: 12px;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    .timeline-col-val {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      text-align: center;
+      padding: 10px 6px;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--cp-blue);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .timeline-col-val.highlight {
+      background: #eff6ff;
+      border-color: #93c5fd;
+      color: #1d4ed8;
+    }
+
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 4px; }
 
     @media (max-width: 990px) {
       .dashboard-layout { grid-template-columns: 1fr; }
@@ -464,7 +497,7 @@
     </div>
   </div>
 
-  <!-- Live Scrolling Marquee Feed -->
+  <!-- Live Moving Ticker Feed -->
   <div class="live-feed-strip">
     <div class="live-feed-badge">
       <span style="font-size: 10px;">⚡</span> LIVE ACTIVITY FEED
@@ -476,7 +509,7 @@
     </div>
   </div>
 
-  <!-- KPI Cards (3 Metrics) -->
+  <!-- KPI Cards -->
   <div class="kpi-grid">
     <div class="kpi-card blue">
       <div>
@@ -504,10 +537,9 @@
   <!-- Main Body Layout -->
   <div class="dashboard-layout">
     
-    <!-- LEFT COLUMN: Leaderboard + Team Wise Pie Chart -->
+    <!-- LEFT: Leaderboard + Pie Chart -->
     <div class="left-stack">
       
-      <!-- 1. Leaderboard -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>🏆 Rank & Individual Leaderboard</h3>
@@ -526,7 +558,6 @@
         </div>
       </div>
 
-      <!-- 2. Team Wise Conversion Pie Chart -->
       <div class="panel-card">
         <div class="panel-header">
           <h3>📊 Team-Wise Conversion Share</h3>
@@ -539,7 +570,7 @@
 
     </div>
 
-    <!-- RIGHT COLUMN: Team Wise & Date-wise Tables -->
+    <!-- RIGHT: Team Performance & Horizontal Date Tracker -->
     <div class="right-stack">
 
       <!-- 1. Team Wise Performance Table -->
@@ -565,25 +596,16 @@
         </div>
       </div>
 
-      <!-- 2. Date-wise Activity Table -->
+      <!-- 2. Horizontal Date & Orgs Converted Section (17-Nov to 24-Nov) -->
       <div class="panel-card">
         <div class="panel-header">
-          <h3>📅 Date-wise Daily Activity</h3>
-          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Daily Volume</span>
+          <h3>📅 Daily Timeline Activity (17-Nov to 24-Nov)</h3>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Campaign Days</span>
         </div>
-        <div class="table-responsive">
-          <table>
-            <thead>
-              <tr>
-                <th class="col-date">Date</th>
-                <th class="col-d-orgs">Total Number of Orgs</th>
-                <th class="col-d-conv">Orgs Converted</th>
-              </tr>
-            </thead>
-            <tbody id="date-body">
-              <!-- Dynamically rendered -->
-            </tbody>
-          </table>
+        <div class="timeline-container">
+          <div class="timeline-grid" id="timeline-grid">
+            <!-- Dynamically populated rows: Header, Date Row, Orgs Converted Row -->
+          </div>
         </div>
       </div>
 
@@ -593,7 +615,7 @@
 
   <script>
     const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyCCVzSpKZlIi0I29BPsfhvhtz48frxJOrDJswKuTNIMP4Mf3UjR_GlMRXoh1pzga0Z/exec';
-    const POLL_INTERVAL = 15000; // Har 15 seconds mein auto-refresh
+    const POLL_INTERVAL = 15000;
     let pieChartInstance = null;
 
     function getTeamTagClass(team) {
@@ -605,13 +627,13 @@
       return 'tag-default';
     }
 
-    // Exact Verified Fallback from your Screenshot
+    // Exact Verified Data from your Screenshot (17-Nov to 24-Nov)[cite: 4]
     function getFallbackData() {
       return {
         kpis: {
-          txnsConverted: "25,542",
-          revenue: "₹2,55,420",
-          convRate: "3.50%"
+          txnsConverted: "29,240",
+          revenue: "₹2,92,400",
+          convRate: "4.00%"
         },
         performers: [
           { rank: 1, name: "Rahul", team: "Skills", share: "32.05%" },
@@ -622,17 +644,19 @@
         ],
         teams: [
           { team: "Acads", totalOrgs: "40", conv: "15,465", rawConv: 15465, pct: "3.85%" },
-          { team: "Skills", totalOrgs: "4", conv: "3,801", rawConv: 3801, pct: "4.99%" },
+          { team: "Skills", totalOrgs: "7", conv: "7,499", rawConv: 7499, pct: "9.84%" },
           { team: "Team 1, 2 & Gro", totalOrgs: "34", conv: "6,276", rawConv: 6276, pct: "2.55%" },
           { team: "HVA", totalOrgs: "0", conv: "0", rawConv: 0, pct: "0.00%" }
         ],
         dates: [
-          { date: "17-Nov", totalOrgs: 8, convertedOrgs: 8 },
-          { date: "18-Nov", totalOrgs: 8, convertedOrgs: 8 },
-          { date: "19-Nov", totalOrgs: 10, convertedOrgs: 10 },
-          { date: "20-Nov", totalOrgs: 25, convertedOrgs: 25 },
-          { date: "21-Nov", totalOrgs: 27, convertedOrgs: 27 },
-          { date: "22-Nov", totalOrgs: 0, convertedOrgs: 0 }
+          { date: "17-Nov", convertedOrgs: 8 },
+          { date: "18-Nov", convertedOrgs: 8 },
+          { date: "19-Nov", convertedOrgs: 10 },
+          { date: "20-Nov", convertedOrgs: 25 },
+          { date: "21-Nov", convertedOrgs: 30 },
+          { date: "22-Nov", convertedOrgs: 0 },
+          { date: "23-Nov", convertedOrgs: 0 },
+          { date: "24-Nov", convertedOrgs: 0 }
         ]
       };
     }
@@ -703,7 +727,7 @@
         document.getElementById('kpi-conv').textContent = data.kpis.convRate || '0.00%';
       }
 
-      // 2. Live Moving Ticker Feed
+      // 2. Ticker
       const tickerTrack = document.getElementById('ticker-track');
       let tickerItems = [];
 
@@ -737,7 +761,7 @@
 
       tickerTrack.innerHTML = tickerItems.join('') + tickerItems.join('');
 
-      // 3. Leaderboard Rows
+      // 3. Leaderboard
       if (Array.isArray(data.performers)) {
         document.getElementById('leaderboard-count').textContent = `${data.performers.length} Performers`;
         const listEl = document.getElementById('performer-list');
@@ -754,7 +778,7 @@
         }).join('');
       }
 
-      // 4. Team Wise Performance Table & Pie Chart
+      // 4. Team Table & Pie Chart
       if (Array.isArray(data.teams)) {
         const teamBody = document.getElementById('team-body');
         teamBody.innerHTML = data.teams.map(t => `
@@ -769,20 +793,37 @@
         updatePieChart(data.teams);
       }
 
-      // 5. Date-wise Activity Table
-      if (Array.isArray(data.dates)) {
-        const dateBody = document.getElementById('date-body');
-        dateBody.innerHTML = data.dates.map(d => `
-          <tr>
-            <td style="font-weight: 700; color: var(--cp-navy);">${d.date}</td>
-            <td style="font-weight: 700; text-align: center;">${d.totalOrgs}</td>
-            <td style="font-weight: 800; color: var(--cp-blue); text-align: right;">${d.convertedOrgs}</td>
-          </tr>
-        `).join('');
+      // 5. Horizontal Timeline Activity (Row 1: Date, Row 2: Orgs Converted)
+      if (Array.isArray(data.dates) && data.dates.length > 0) {
+        // Sirf 17-Nov se 24-Nov ensure karein
+        const targetDates = ["17-Nov", "18-Nov", "19-Nov", "20-Nov", "21-Nov", "22-Nov", "23-Nov", "24-Nov"];
+        
+        let dateMap = {};
+        data.dates.forEach(d => {
+          dateMap[d.date] = d.convertedOrgs;
+        });
+
+        const timelineGrid = document.getElementById('timeline-grid');
+        let html = '';
+
+        // Row 1: Header + Dates
+        html += `<div class="timeline-row-header">📅 Date</div>`;
+        targetDates.forEach(dt => {
+          html += `<div class="timeline-col-head">${dt}</div>`;
+        });
+
+        // Row 2: Header + Orgs Converted Values
+        html += `<div class="timeline-row-header">🎯 Orgs Converted</div>`;
+        targetDates.forEach(dt => {
+          const val = dateMap[dt] !== undefined ? dateMap[dt] : 0;
+          const isHighlight = val > 0 ? 'highlight' : '';
+          html += `<div class="timeline-col-val ${isHighlight}">${val}</div>`;
+        });
+
+        timelineGrid.innerHTML = html;
       }
     }
 
-    // Live Sync Function
     async function syncData() {
       try {
         const res = await fetch(WEB_APP_URL);
@@ -795,7 +836,7 @@
           }
         }
       } catch (err) {
-        console.warn('Sync issue, rendering exact verified data:', err);
+        console.warn('Sync issue, serving exact screenshot verified data:', err);
       }
       renderUI(getFallbackData());
       document.getElementById('sync-text').textContent = 'LIVE SYNC ACTIVE';
